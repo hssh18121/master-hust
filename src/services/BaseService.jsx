@@ -7,9 +7,9 @@ export async function getData(query) {
             console.log("No more posts available.");
             return [];
         }
-        // data.docs.forEach(e => {
-        //     console.log(e.ref.path)
-        // })
+        data.docs.forEach(e => {
+            console.log(e.ref.path)
+        })
         return data.docs.map((item) => ({
             id: item.id,
             ...item.data(),
@@ -77,5 +77,24 @@ export async function create(insertData, collectionName) {
             success: false,
             error: error.message,
         };
+    }
+}
+
+export async function findById(collectionName, documentId) {
+    try {
+        const documentRef = firestore.collection(collectionName).doc(documentId);
+        const documentSnapshot = await documentRef.get();
+
+        if (documentSnapshot.exists) {
+            // Document found, return the data
+            return documentSnapshot.data();
+        } else {
+            // Document not found
+            console.log(`Document with ID ${documentId} not found in collection ${collectionName}.`);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error getting document:', error);
+        return null;
     }
 }

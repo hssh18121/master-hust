@@ -1,4 +1,4 @@
-import { paginate, create, all, getData } from "./BaseService";
+import { paginate, create, all, getData, findById } from "./BaseService";
 import { firestore } from "../config/firebase";
 
 export async function getPosts(currentPage) {
@@ -6,6 +6,12 @@ export async function getPosts(currentPage) {
     query = await paginate(query, currentPage)
     const data = getData(query)
     return data
+}
+
+export async function getPostById(id) {
+  const data = await findById('posts', id)
+  console.log(data)
+  return data
 }
 
 export async function getPostsByTopicId(topicId) {
