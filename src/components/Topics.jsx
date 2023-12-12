@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { getPosts, getPostById } from "../services/PostService";
+import Post from "./Post";
+
 const Topics = () => {
   const [posts, setPosts] = useState([]);
   const currentPage = 2;
@@ -35,10 +37,7 @@ const Topics = () => {
         <h2>Post List</h2>
         <ul>
           {posts.map((post) => (
-            <li key={post.id}>
-              <strong>{post.title}</strong>: {post.content}
-              <strong>Topic: {post.topic.name}</strong>
-            </li>
+            <Post post={post} key={post.id}></Post>
           ))}
         </ul>
       </div>
