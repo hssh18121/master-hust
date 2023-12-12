@@ -10,7 +10,7 @@ const Dashboard = () => {
   return (
     <div className="h-full">
       <Header />
-      <div className="flex h-[92vh]">
+      <div className="flex h-[90vh]">
         <Sidebar />
         <div className="bg-gray-200 w-4/5 h-full overflow-scroll">
           <Outlet />

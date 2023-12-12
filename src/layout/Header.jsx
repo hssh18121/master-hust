@@ -3,7 +3,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 
 const Header = () => {
   return (
-    <div className="flex justify-between px-4 py-2 h-[8vh] shadow items-center">
+    <div className="flex justify-between px-4 py-2 h-[10vh] shadow items-center">
       <Link to="/">
         <img src="/logo.png" />
       </Link>
