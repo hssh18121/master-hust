@@ -9,7 +9,18 @@ export async function getPosts(currentPage) {
 }
 
 export async function getPostById(id) {
-  const data = await findById("posts", id);
+  let data = await findById("posts", id);
+  if (data.topicRef !== undefined) {
+    const topicSnapshot = await data.topicRef.get();
+    const topicData = topicSnapshot.data();
+    data = { ...data, topic: topicData };
+  }
+  if (data.userRef !== undefined) {
+    const userSnapshot = await data.userRef.get();
+    const userData = userSnapshot.data();
+    data = { ...data, user: userData };
+  }
+
   return data;
 }
 

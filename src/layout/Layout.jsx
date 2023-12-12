@@ -1,12 +1,13 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const url = useLocation()
 
-  useEffect(() => navigate("/topics"), [navigate]);
+  useEffect(() => {if(url.pathname==="/") navigate("/topics")}, [navigate, url.pathname]);
   return (
     <div className="h-full">
       <Header />
