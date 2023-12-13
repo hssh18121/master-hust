@@ -5,9 +5,12 @@ import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const url = useLocation()
+  const url = useLocation();
 
-  useEffect(() => {if(url.pathname==="/") navigate("/topics")}, [navigate, url.pathname]);
+  useEffect(() => {
+    if (url.pathname === "/") navigate("/topics");
+  }, [navigate, url.pathname]);
+
   return (
     <div className="h-full">
       <Header />
