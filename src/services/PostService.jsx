@@ -43,3 +43,23 @@ export async function createPost() {
   };
   create(postData, "posts");
 }
+
+export async function getPostsWithInfo(currentPage) {
+  const postsData = await getPosts(currentPage);
+  return await Promise.all(
+    postsData.map(async (post) => {
+      let postWithInfo = { ...post };
+      if (post.topicRef !== undefined) {
+        const topicSnapshot = await post.topicRef.get();
+        const topicData = topicSnapshot.data();
+        postWithInfo = { ...postWithInfo, topic: topicData };
+      }
+      if (post.userRef !== undefined) {
+        const userSnapshot = await post.userRef.get();
+        const userData = userSnapshot.data();
+        postWithInfo = { ...postWithInfo, user: userData };
+      }
+      return postWithInfo;
+    })
+  );
+}
