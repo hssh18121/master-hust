@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { getPosts, getPostById } from "../services/PostService";
+import {
+  getPosts,
+  getPostById,
+  getPostsWithInfo,
+} from "../services/PostService";
 import Post from "./Post";
 
 const Topics = () => {
@@ -9,18 +13,7 @@ const Topics = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        getPostById("UCnSBPN2Rw879RhgWWX1");
-        const postsData = await getPosts(currentPage);
-        const postsWithTopics = await Promise.all(
-          postsData.map(async (post) => {
-            if (post.topicRef !== undefined) {
-              const topicSnapshot = await post.topicRef.get();
-              const topicData = topicSnapshot.data();
-              return { ...post, topic: topicData };
-            }
-            return post;
-          })
-        );
+        const postsWithTopics = await getPostsWithInfo(currentPage);
 
         setPosts(postsWithTopics);
       } catch (error) {
