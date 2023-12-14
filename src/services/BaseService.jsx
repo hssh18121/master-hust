@@ -7,9 +7,9 @@ export async function getData(query) {
       console.log("No more posts available.");
       return [];
     }
-    data.docs.forEach((e) => {
-      console.log(e.ref.path);
-    });
+    // data.docs.forEach((e) => {
+    //   console.log(e.ref.path);
+    // });
     return data.docs.map((item) => ({
       id: item.id,
       ...item.data(),
@@ -30,6 +30,16 @@ export function all(collectionName) {
     throw error;
   }
 }
+
+// export async function countRecords(collectionQuery) {
+//   try {
+//     const snapshot = await collectionQuery.count().get()
+//     console.log(snapshot)
+//     return snapshot.data().count
+//   } catch(error) {
+//     console.error("Something wrong happened", error)
+//   }
+// }
 
 export async function paginate(query, currentPage = 1) {
   const pageSize = 6;

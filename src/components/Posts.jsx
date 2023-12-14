@@ -14,14 +14,14 @@ const Posts = () => {
   const currentPage = parseInt(currentPageParam);
 
   const handleChange = (event, pageValue) => {
-    navigateTo(`/posts?page=${pageValue}`);
+    navigateTo(`/posts?page=${Number(pageValue)}`);
   };
 
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   async function fetchData() {
     const postList = await getPostsWithInfo(currentPage);
@@ -34,18 +34,20 @@ const Posts = () => {
   }
 
   return (
-    <div>
-      <div className="flex flex-wrap p-4">
+    <div className="max-w-6xl mx-auto my-5">
+      <div className="grid grid-cols-3 p-4 gap-6">
         {posts
           ? posts.map((post) => <Post post={post} key={post.id} />)
           : "Loading"}
       </div>
-      <Pagination
-        count={posts.length / 6 + 1}
-        color="primary"
-        page={currentPage}
-        onChange={handleChange}
-      />
+      <div className="flex flex-wrap p-4 items-center justify-end">
+        <Pagination
+          count={2}
+          color="primary"
+          page={currentPage}
+          onChange={handleChange}
+        />
+      </div>
     </div>
   );
 };

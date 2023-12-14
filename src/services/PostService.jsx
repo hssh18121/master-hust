@@ -8,6 +8,13 @@ export async function getPosts(currentPage) {
   return data;
 }
 
+// export async function countPosts() {
+//   let query = all("posts");
+//   const numberOfPosts = await countRecords(query)
+//   console.log(numberOfPosts)
+//   return numberOfPosts
+// }
+
 export async function getPostById(id) {
   let data = await findById("posts", id);
   if (data.topicRef !== undefined) {
@@ -37,9 +44,11 @@ export async function getPostsByTopicId(topicId) {
 
 export async function createPost() {
   const postData = {
-    title: "Test title",
+    title: "Dai so tuyen tinh nang cao",
     content: "Post content goes here",
     image: "a random url",
+    topicRef: "topics/gtkxdlojGhsp3vhVfU19",
+    userRef: "users/VxkFXMWJHwlXWCN09ik6",
   };
   create(postData, "posts");
 }

@@ -18,7 +18,6 @@ function DetailPost() {
   useEffect(() => {
     getPostById(id)
       .then((data) => {
-        console.log(data);
         setPost(data);
       })
       .finally(() => setLoading(false));

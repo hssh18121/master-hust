@@ -6,13 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCommentAlt, FaArrowUp } from "react-icons/fa";
 
 function Post({ post }) {
-  console.log(post);
   const navigate = useNavigate();
   if (!post) return <>No more posts</>;
   return (
     <div
       onClick={() => navigate(`/posts/detail/${post.id}`)}
-      className={`flex flex-col gap-4 w-96 h-[300px] overflow-hidden p-4 mr-4 mb-4 cursor-pointer bg-white rounded-md shadow-md hover:-translate-y-1 duration-100`}
+      className={`flex flex-col gap-4 h-[324px] overflow-hidden p-4 cursor-pointer bg-white rounded-md shadow-md hover:-translate-y-1 duration-100`}
     >
       <div className="flex gap-4">
         <img className="w-12 h-12 rounded-full" src={post.user.avatarUrl} />

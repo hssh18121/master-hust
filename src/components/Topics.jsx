@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  getPosts,
-  getPostById,
   getPostsWithInfo,
 } from "../services/PostService";
 import Post from "./Post";
