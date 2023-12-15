@@ -9,6 +9,15 @@ const Posts = () => {
   const location = useLocation();
   const navigateTo = useNavigate();
 
+  const colors = [
+    '#FCFAEE',
+    "#FDFFF0",
+    "#F1FCF0",
+    "#EDF5F8",
+    "#F3F5FF",
+    "#F6EEF9"
+  ]
+
   const currentPageParam =
     new URLSearchParams(location.search).get("page") || 1;
   const currentPage = parseInt(currentPageParam);
@@ -37,7 +46,7 @@ const Posts = () => {
     <div className="max-w-6xl mx-auto my-5">
       <div className="grid grid-cols-3 p-4 gap-6">
         {posts
-          ? posts.map((post) => <Post post={post} key={post.id} />)
+          ? posts.map((post, index) => <Post post={post} color={colors[index]} key={post.id} />)
           : "Loading"}
       </div>
       <div className="flex flex-wrap p-4 items-center justify-end">
