@@ -1,5 +1,6 @@
-import { paginate, create, all, getData, findById } from "./BaseService";
+import { paginate, create, all, getData, findById, update } from "./BaseService";
 import { firestore } from "../config/firebase";
+import { getNumberOfCommentsByPostId } from "./CommentService";
 
 export async function getPosts(currentPage) {
   let query = all("posts");
@@ -27,7 +28,8 @@ export async function getPostById(id) {
     const userData = userSnapshot.data();
     data = { ...data, user: userData };
   }
-
+  const numberOfComment = await getNumberOfCommentsByPostId(id)
+  data = { ...data, comment: numberOfComment }
   return data;
 }
 
@@ -42,15 +44,30 @@ export async function getPostsByTopicId(topicId) {
   return data;
 }
 
-export async function createPost() {
+export async function createPost({ title, content, image, topicId, userId }) {
+  const topicRef = firestore.doc(`topics/${topicId}`)
+  const userRef = firestore.doc(`users/${userId}`)
   const postData = {
-    title: "Dai so tuyen tinh nang cao",
-    content: "Post content goes here",
-    image: "a random url",
-    topicRef: "topics/gtkxdlojGhsp3vhVfU19",
-    userRef: "users/VxkFXMWJHwlXWCN09ik6",
-  };
-  create(postData, "posts");
+    title: title,
+    content: content, 
+    image: image ? image : "A random image url",
+    topicRef: topicRef,
+    userRef: userRef,
+    like: Math.floor(Math.random() * 101),
+  }
+  create("posts", postData);
+}
+
+export async function updatePost({ id, title, content, image, topicId }) {
+  const topicRef = firestore.doc(`topics/${topicId}`)
+  const postUpdateData = {
+    title: title,
+    content: content, 
+    image: image ? image : "A random image url",
+    topicRef: topicRef,
+    like: Math.floor(Math.random() * 100),
+  }
+  update("posts", id, postUpdateData);
 }
 
 export async function getPostsWithInfo(currentPage) {
@@ -68,6 +85,8 @@ export async function getPostsWithInfo(currentPage) {
         const userData = userSnapshot.data();
         postWithInfo = { ...postWithInfo, user: userData };
       }
+      const numberOfComment = await getNumberOfCommentsByPostId(post.id)
+      postWithInfo = {...postWithInfo, comment: numberOfComment}
       return postWithInfo;
     })
   );

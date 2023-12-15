@@ -31,10 +31,10 @@ function Post({ post, color }) {
       </div>
       <div className="flex w-1/3 justify-around text-xs font-thin absolute left-2 bottom-2">
         <div className="flex justify-center items-center gap-2">
-          <span>12</span> <FaRegCommentAlt />
+          <span>{post.comment ? post.comment : 0}</span> <FaRegCommentAlt />
         </div>
         <div className="flex justify-center items-center gap-2">
-          <span>23</span> <FaArrowUp />
+          <span>{post.like ? post.like : 0}</span> <FaArrowUp />
         </div>
       </div>
     </div>

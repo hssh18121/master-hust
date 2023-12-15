@@ -8,6 +8,7 @@ import EditAndDeleteMenu from "./EditAndDeleteMenu";
 import { BiComment } from "react-icons/bi";
 import { BiUpArrowAlt } from "react-icons/bi";
 import ProfileCard from "./ProfileCard";
+import Loading from "../common/Loading";
 
 function DetailPost() {
   const id = useParams().id;
@@ -45,11 +46,11 @@ function DetailPost() {
                 <div className="flex gap-4">
                   <div className="text-neutral-400 text-xs flex gap-1 items-center">
                     <BiComment size={16} />
-                    {post.like}
+                    {post.comment ? post.comment : 0}
                   </div>
                   <div className="text-neutral-400 text-xs flex items-center">
                     <BiUpArrowAlt size={20} />
-                    {post.like}
+                    {post.like ? post.like : 0}
                   </div>
                 </div>
 
@@ -70,7 +71,7 @@ function DetailPost() {
           </div>
         </div>
       ) : (
-        <>loading...</>
+        <><Loading /></>
       )}
     </>
   );
