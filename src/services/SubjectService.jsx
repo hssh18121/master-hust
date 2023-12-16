@@ -1,5 +1,5 @@
 import { firestore } from "../config/firebase";
-import { all, getData } from "./BaseService";
+import { all, create, getData } from "./BaseService";
 
 export async function getSubjectsByTopicId(topicId) {
     // Get the topic reference
@@ -10,4 +10,15 @@ export async function getSubjectsByTopicId(topicId) {
 
   const data = getData(query);
   return data;
+}
+
+export async function createSubject({ topicId, name }) {
+  const topicRef = firestore.doc(`topics/${topicId}`)
+
+  const subjectData = {
+    name: name, 
+    topicRef: topicRef
+  }
+
+  create("subjects", subjectData)
 }
