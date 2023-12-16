@@ -18,10 +18,15 @@ export async function getPosts(currentPage) {
 
 export async function getPostById(id) {
   let data = await findById("posts", id);
-  if (data.topicRef !== undefined) {
-    const topicSnapshot = await data.topicRef.get();
-    const topicData = topicSnapshot.data();
-    data = { ...data, topic: topicData };
+  if (data.subjectRef !== undefined) {
+    const subjectSnapshot = await data.subjectRef.get();
+    const subjectData = subjectSnapshot.data();
+    if (subjectData.topicRef !== undefined) {
+      const topicSnapshot = await subjectData.topicRef.get();
+      const topicData = topicSnapshot.data();
+      data = { ...data, topic: topicData.name ? topicData.name : "" };
+    }
+    data = { ...data, subject: subjectData.name ? subjectData.name : "" };
   }
   if (data.userRef !== undefined) {
     const userSnapshot = await data.userRef.get();
@@ -40,6 +45,13 @@ export async function getPostsByTopicId(topicId) {
   // Create a query to filter posts by topic reference
   const query = await all("posts").where("topicRef", "==", topicRef);
 
+  const data = getData(query);
+  return data;
+}
+
+export async function getPostsBySubjectId(subjectId) {
+  const subjectRef = firestore.doc(`subjects/${subjectId}`);
+  const query = await all("posts").where("subjectRef", "==", subjectRef)
   const data = getData(query);
   return data;
 }
@@ -75,11 +87,6 @@ export async function getPostsWithInfo(currentPage) {
   return await Promise.all(
     postsData.map(async (post) => {
       let postWithInfo = { ...post };
-      if (post.topicRef !== undefined) {
-        const topicSnapshot = await post.topicRef.get();
-        const topicData = topicSnapshot.data();
-        postWithInfo = { ...postWithInfo, topic: topicData };
-      }
       if (post.userRef !== undefined) {
         const userSnapshot = await post.userRef.get();
         const userData = userSnapshot.data();
