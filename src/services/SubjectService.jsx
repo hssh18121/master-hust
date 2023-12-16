@@ -22,3 +22,4 @@ export async function createSubject({ topicId, name }) {
 
   create("subjects", subjectData)
 }
+
