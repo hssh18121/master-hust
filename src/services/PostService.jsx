@@ -56,13 +56,15 @@ export async function getPostsBySubjectId(subjectId) {
   return data;
 }
 
-export async function createPost({ title, content, image, topicId, userId }) {
+export async function createPost({ title, content, image, subjectId, topicId, userId }) {
+  const subjectRef = firestore.doc(`subjects/${subjectId}`)
   const topicRef = firestore.doc(`topics/${topicId}`)
   const userRef = firestore.doc(`users/${userId}`)
   const postData = {
     title: title,
     content: content, 
     image: image ? image : "A random image url",
+    subjectRef: subjectRef,
     topicRef: topicRef,
     userRef: userRef,
     like: Math.floor(Math.random() * 101),
@@ -70,14 +72,15 @@ export async function createPost({ title, content, image, topicId, userId }) {
   create("posts", postData);
 }
 
-export async function updatePost({ id, title, content, image, topicId }) {
+export async function updatePost({ id, title, content, image, subjectId, topicId }) {
+  const subjectRef = firestore.doc(`subjects/${subjectId}`)
   const topicRef = firestore.doc(`topics/${topicId}`)
   const postUpdateData = {
     title: title,
     content: content, 
     image: image ? image : "A random image url",
+    subjectRef: subjectRef,
     topicRef: topicRef,
-    like: Math.floor(Math.random() * 100),
   }
   update("posts", id, postUpdateData);
 }
