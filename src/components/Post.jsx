@@ -5,13 +5,14 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { FaRegCommentAlt, FaArrowUp } from "react-icons/fa";
 
-function Post({ post }) {
+function Post({ post, color }) {
   const navigate = useNavigate();
   if (!post) return <>No more posts</>;
   return (
     <div
       onClick={() => navigate(`/posts/detail/${post.id}`)}
-      className={`flex flex-col gap-4 h-[324px] overflow-hidden p-4 cursor-pointer bg-white rounded-md shadow-md hover:-translate-y-1 duration-100`}
+      className={`flex flex-col relative gap-4 h-[328px] overflow-hidden p-4 cursor-pointer rounded-md shadow-md hover:-translate-y-1 duration-100`}
+      style={{"backgroundColor": color}}
     >
       <div className="flex gap-4">
         <img className="w-12 h-12 rounded-full" src={post.user.avatarUrl} />
@@ -28,9 +29,13 @@ function Post({ post }) {
           ? post.content.substring(0, 250) + "..."
           : post.content}
       </div>
-      <div className="flex w-1/3 justify-around text-xs font-thin">
-        12 <FaRegCommentAlt />
-        23 <FaArrowUp />
+      <div className="flex w-1/3 justify-around text-xs font-thin absolute left-2 bottom-2">
+        <div className="flex justify-center items-center gap-2">
+          <span>{post.comment ? post.comment : 0}</span> <FaRegCommentAlt />
+        </div>
+        <div className="flex justify-center items-center gap-2">
+          <span>{post.like ? post.like : 0}</span> <FaArrowUp />
+        </div>
       </div>
     </div>
   );

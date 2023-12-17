@@ -20,10 +20,10 @@ export async function getData(query) {
   }
 }
 
-export function all(collectionName) {
+export function all(collectionName, sortOption = "createdAt") {
   try {
     const postsRef = firestore.collection(collectionName);
-    let query = postsRef.orderBy("createdAt", "desc");
+    let query = postsRef.orderBy(sortOption, "desc");
     return query;
   } catch (error) {
     console.error("Something wrong happened", error);
@@ -67,7 +67,7 @@ export async function paginate(query, currentPage = 1) {
   }
 }
 
-export async function create(insertData, collectionName) {
+export async function create(collectionName, insertData) {
   try {
     const docRef = await firestore.collection(collectionName).add({
       ...insertData,
@@ -88,6 +88,19 @@ export async function create(insertData, collectionName) {
       error: error.message,
     };
   }
+}
+
+export function update(collectionName, documentId, updateData) {
+  const docRef = firestore.collection(collectionName).doc(documentId);
+
+  // Use the update method to modify specific fields of the document
+  return docRef.update({...updateData, updatedAt: new Date() })
+      .then(() => {
+          console.log(`Document with ID ${documentId} successfully updated.`);
+      })
+      .catch((error) => {
+          console.error(`Error updating document: ${error}`);
+      });
 }
 
 export async function findById(collectionName, documentId) {
