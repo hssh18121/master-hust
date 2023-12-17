@@ -11,7 +11,7 @@ function Post({ post, color }) {
   return (
     <div
       onClick={() => navigate(`/posts/detail/${post.id}`)}
-      className={`flex flex-col relative gap-4 h-[328px] overflow-hidden p-4 cursor-pointer rounded-md shadow-md hover:-translate-y-1 duration-100`}
+      className={`flex flex-col relative gap-4 h-[356px] overflow-hidden p-4 cursor-pointer rounded-md shadow-md hover:-translate-y-1 duration-100`}
       style={{"backgroundColor": color}}
     >
       <div className="flex gap-4">
@@ -25,8 +25,8 @@ function Post({ post, color }) {
       </div>
       <strong>{post.title}</strong>
       <div>
-        {post.content.length > 300
-          ? post.content.substring(0, 250) + "..."
+        {post.content.length > 200
+          ? post.content.substring(0, 200) + "..."
           : post.content}
       </div>
       <div className="flex w-1/3 justify-around text-xs font-thin absolute left-2 bottom-2">
