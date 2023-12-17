@@ -26,8 +26,8 @@ function DetailPost() {
   return (
     <>
       {!loading ? (
-        <div className="grid grid-cols-4 p-8 justify-between ">
-          <div className="justify-center flex mx-8 col-span-3 ">
+        <div className="flex justify-between p-8 flex-col-reverse gap-6 lg:flex-row">
+          <div className="justify-center flex w-full">
             <div className="bg-white p-8 flex flex-col gap-4 rounded-md">
               <div className="flex justify-between">
                 <Creator
@@ -63,7 +63,7 @@ function DetailPost() {
               </div>
             </div>
           </div>
-          <div className="justify-center col-span-1">
+          <div className="justify-center lg:w-1/4 w-full">
             <ProfileCard
               imgURL={post.user.avatarUrl}
               user={post.user}
