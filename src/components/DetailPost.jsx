@@ -28,7 +28,7 @@ function DetailPost() {
       {!loading ? (
         <div className="flex justify-between p-8 flex-col-reverse gap-6 lg:flex-row">
           <div className="justify-center flex w-full">
-            <div className="bg-white p-8 flex flex-col gap-4 rounded-md">
+            <div className="bg-white p-8 flex flex-col gap-4 rounded-md w-full">
               <div className="flex justify-between">
                 <Creator
                   avatarURL={post.user.avatarUrl}
