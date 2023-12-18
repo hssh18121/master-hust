@@ -33,6 +33,9 @@ const AccordionSummary = styled((props) => (
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
+  "@media (max-width: 640px)": {
+    padding: theme.spacing(0.25),
+  },
 }));
 
 const topics = [
@@ -64,7 +67,7 @@ export default function MyAccordion() {
             <span className="">
               <FaBookOpen />
             </span>
-            <span>Chủ đề</span>
+            <span className="hidden md:block">Chủ đề</span>
           </div>
         </AccordionSummary>
         <AccordionDetails>
@@ -77,7 +80,9 @@ export default function MyAccordion() {
                 key={t.title}
                 onClick={() => handleSelectTopic(t.title)}
               >
-                <span>{t.title}</span>
+                <span className="text-xs md:text-sm lg:text-base">
+                  {t.title}
+                </span>
               </div>
             ))}
           </div>

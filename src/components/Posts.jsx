@@ -52,14 +52,14 @@ const Posts = () => {
     <>
       {!loading ? (
         <div className="max-w-6xl mx-auto my-5">
-          <div className="grid grid-cols-3 p-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 gap-6">
             {posts
               ? posts.map((post, index) => (
                   <Post post={post} color={colors[index]} key={post.id} />
                 ))
               : "Loading"}
           </div>
-          <div className="flex flex-wrap p-4 items-center justify-end">
+          <div className="flex flex-wrap p-4 items-center justify-center md:justify-end">
             <Pagination
               count={2}
               color="primary"

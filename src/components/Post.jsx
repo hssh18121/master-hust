@@ -25,8 +25,8 @@ function Post({ post, color }) {
       </div>
       <strong>{post.title}</strong>
       <div>
-        {post.content.length > 300
-          ? post.content.substring(0, 250) + "..."
+        {post.content.length > 200
+          ? post.content.substring(0, 200) + "..."
           : post.content}
       </div>
       <div className="flex w-1/3 justify-around text-xs font-thin absolute left-2 bottom-2">
