@@ -4,7 +4,7 @@ import { OrangeButton } from "../common";
 
 const Header = () => {
   return (
-    <div className="flex justify-between px-4 py-2 h-[10vh] shadow items-center">
+    <div className="flex justify-between px-4 py-2 h-[10vh] shadow-lg items-center relative z-10">
       <Link to="/">
         <img src="/logo.png" />
       </Link>

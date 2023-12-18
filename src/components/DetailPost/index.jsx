@@ -18,6 +18,7 @@ function DetailPost() {
   const [post, setPost] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [loadingComments, setLoadingComments] = useState(true);
+  const [postingComment, setPostingComment] = useState(false);
   const [comments, setComments] = useState([]);
 
   const hide = true;
@@ -33,8 +34,8 @@ function DetailPost() {
     setLoadingComments(true);
     getCommentsByPostId(id)
       .then((data) => setComments(data))
-      .finally(setLoadingComments(false));
-  }, [id]);
+      .finally(() => setLoadingComments(false));
+  }, [id, postingComment]);
 
   console.log(comments);
 
@@ -51,7 +52,7 @@ function DetailPost() {
                       avatarURL={post.user.avatarUrl}
                       name={post.user.name}
                       createdAt={post.createdAt.seconds}
-                    ></Creator>
+                    />
                     <EditAndDeleteMenu />
                   </div>
                   <h2 className="text-md text-neutral-950 font-semibold">
@@ -93,12 +94,21 @@ function DetailPost() {
                   Bình luận
                 </p>
               </div>
-              <CommentForm />
+              <CommentForm
+                postId={id}
+                postingComment={postingComment}
+                setPostingComment={setPostingComment}
+              />
               {loadingComments ? (
                 <Loading />
               ) : (
                 comments.map((comment) => (
-                  <Comment key={comment.id} comment={comment} />
+                  <Comment
+                    key={comment.id}
+                    comment={comment}
+                    postingComment={postingComment}
+                    setPostingComment={setPostingComment}
+                  />
                 ))
               )}
             </div>
