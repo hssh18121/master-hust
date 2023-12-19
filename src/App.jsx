@@ -1,13 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { Layout } from "./layout";
-import { DetailPost, Topics, Posts } from "./components";
+import { DetailPost, Topics, Posts, NewPost } from "./components";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/topics" element={<Topics />} />
+        <Route path="/newpost" element={<NewPost/>}/>
         <Route path="/posts/detail/:id" element={<DetailPost />}/>
         <Route path="/posts" element={<Posts />}></Route>
       </Route>
