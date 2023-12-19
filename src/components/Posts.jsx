@@ -4,10 +4,21 @@ import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getPostsWithInfo } from "../services/PostService";
 import Post from "./Post";
+import { Loading } from "../common";
 
 const Posts = () => {
   const location = useLocation();
   const navigateTo = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  const colors = [
+    "#FCFAEE",
+    "#FDFFF0",
+    "#F1FCF0",
+    "#EDF5F8",
+    "#F3F5FF",
+    "#F6EEF9",
+  ];
 
   const currentPageParam =
     new URLSearchParams(location.search).get("page") || 1;
@@ -20,35 +31,47 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
   }, [currentPage]);
 
   async function fetchData() {
-    const postList = await getPostsWithInfo(currentPage);
-    postList.sort((a, b) => {
-      if (b.createdAt.seconds !== a.createdAt.seconds)
-        return b.createdAt.seconds - a.createdAt.seconds;
-      else return b.createdAt.nanoseconds - a.createdAt.nanoseconds;
-    });
-    setPosts(postList);
+    getPostsWithInfo(currentPage)
+      .then((data) => {
+        data = data.sort((a, b) => {
+          if (b.createdAt.seconds !== a.createdAt.seconds)
+            return b.createdAt.seconds - a.createdAt.seconds;
+          else return b.createdAt.nanoseconds - a.createdAt.nanoseconds;
+        });
+        setPosts(data);
+      })
+      .finally(() => setLoading(false));
   }
 
   return (
-    <div className="max-w-6xl mx-auto my-5">
-      <div className="grid grid-cols-3 p-4 gap-6">
-        {posts
-          ? posts.map((post) => <Post post={post} key={post.id} />)
-          : "Loading"}
-      </div>
-      <div className="flex flex-wrap p-4 items-center justify-end">
-        <Pagination
-          count={2}
-          color="primary"
-          page={currentPage}
-          onChange={handleChange}
-        />
-      </div>
-    </div>
+    <>
+      {!loading ? (
+        <div className="max-w-6xl mx-auto my-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 gap-6">
+            {posts
+              ? posts.map((post, index) => (
+                  <Post post={post} color={colors[index]} key={post.id} />
+                ))
+              : "Loading"}
+          </div>
+          <div className="flex flex-wrap p-4 items-center justify-center md:justify-end">
+            <Pagination
+              count={2}
+              color="primary"
+              page={currentPage}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+      ) : (
+        <Loading />
+      )}
+    </>
   );
 };
 
