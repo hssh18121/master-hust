@@ -3,24 +3,68 @@ import { Button } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import { getAllTopics } from "../services/TopicService";
+import { getSubjectsByTopicId } from "../services/SubjectService";
+import {createPost} from "../services/PostService"
+import { useNavigate } from "react-router-dom";
 
 function NewPost()
 {
   
-  const [files, setFiles]= React.useState([])
-  const handleImageUpload = ( e ) =>
-  {
-    if ( !e.target.files ) {
-      return
+  const navigate= useNavigate()
+  const [topics, setTopics] = React.useState([]);
+  const [subjects, setSubjects] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [selectedTopic, setSelectedTopic] = React.useState(undefined);
+  const [selectedSubject, setSelectedSubject] = React.useState(undefined);
+  const [files, setFiles] = React.useState( [] );
+  const [title, setTitle] = React.useState( "" )
+  const [content, setContent] = React.useState("");
+  
+  const isNewPost = true;
+
+  React.useEffect(() => {
+    setLoading(true);
+    getAllTopics()
+      .then((data) => {
+        setTopics(data);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  React.useEffect(() => {
+    getSubjectsByTopicId(selectedTopic)
+      .then((data) => {
+        setSubjects(data);
+        setSelectedSubject(undefined);
+      })
+      .catch((err) => console.log(err));
+  }, [selectedTopic]);
+
+  const handleImageUpload = (e) => {
+    if (!e.target.files) {
+      return;
     }
-    const items = e.target.files
-    setFiles( files.concat([...items]))
+    const items = e.target.files;
+    setFiles(files.concat([...items]));
+  };
+
+  const handleSavePost = (e) =>
+  {
+    e.preventDefault();
+    createPost( { title, content, image: "hdjfh", subjectId: selectedSubject, topicId: selectedTopic, userId: "7begC0zuZY0c8Qd2GIRm" } )
+      .then( data => console.log( data ) )
+      .catch( ( error ) => { console.error( error ) } )
+      .finally( () =>
+      {
+        navigate("/")
+      
+    })
   }
-  const isNewPost= true
 
   return (
     <div className="p-8 bg-white rounded-sm m-8">
-      <form >
+      <form>
         <div className="mb-8">
           <textarea
             id="message"
@@ -28,6 +72,7 @@ function NewPost()
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Nhập tiêu đề bài viết"
             required
+            onChange={(e) => setTitle(e.target.value)}
           ></textarea>
         </div>
         <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
@@ -38,6 +83,7 @@ function NewPost()
               className="block w-full px-0 text-sm text-gray-800 focus:outline-none bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
               placeholder="Nhập suy nghĩ của bạn"
               required
+              onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <ImageList
               sx={{ width: "full" }}
@@ -111,29 +157,50 @@ function NewPost()
             <select
               id="topic"
               placeholder="Chọn chủ đề"
+              onChange={(e) => {
+                setSelectedTopic(e.target.value);
+              }}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option selected={selectedTopic === undefined}>
+                Chọn chủ đề
+              </option>
+              {topics.map((one) => (
+                <option
+                  key={one?.id}
+                  value={one?.id}
+                  selected={selectedTopic === one.id}
+                >
+                  {one?.name}
+                </option>
+              ))}
             </select>
           </div>
           <div>
             <select
+              onChange={(e) => {
+                setSelectedSubject(e.target.value);
+              }}
               id="subject"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>Chọn môn học</option>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option selected={selectedSubject === undefined}>
+                Chọn môn học
+              </option>
+              {subjects.map((one) => (
+                <option
+                  key={one?.id}
+                  value={one?.id}
+                  selected={selectedSubject === one.id}
+                >
+                  {one?.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
         <button
-          type="submit"
+          onClick={handleSavePost}
           className="inline-flex items-center px-5 py-2.5  bg-add text-sm font-medium text-center text-white text-whiterounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
         >
           {isNewPost ? "Đăng bài" : "Lưu thay đổi"}
