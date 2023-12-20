@@ -12,6 +12,7 @@ import ProfileCard from "./ProfileCard";
 import { Loading } from "../../common";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
+import SortDropdown from "./SortDropdown";
 
 function DetailPost() {
   const id = useParams().id;
@@ -20,6 +21,7 @@ function DetailPost() {
   const [loadingComments, setLoadingComments] = useState(true);
   const [postingComment, setPostingComment] = useState(false);
   const [comments, setComments] = useState([]);
+  const [sortType, setSortType] = useState("time");
 
   const hide = true;
   useEffect(() => {
@@ -39,6 +41,20 @@ function DetailPost() {
 
   console.log(comments);
 
+  const sort = (type) => {
+    console.log("reached");
+    setSortType(type);
+    type === "time"
+      ? setComments(
+          comments.sort((a, b) => {
+            if (b.createdAt.seconds !== a.createdAt.seconds)
+              return b.createdAt.seconds - a.createdAt.seconds;
+            else return b.createdAt.nanoseconds - a.createdAt.nanoseconds;
+          })
+        )
+      : setComments(comments.sort((a, b) => b.like - a.like));
+  };
+
   return (
     <>
       {!loading ? (
@@ -51,7 +67,7 @@ function DetailPost() {
                     <Creator
                       avatarURL={post.user.avatarUrl}
                       name={post.user.name}
-                      createdAt={post.createdAt.seconds}
+                      createdAt={post.createdAt}
                     />
                     <EditAndDeleteMenu />
                   </div>
@@ -89,7 +105,10 @@ function DetailPost() {
             {/**************************************** COMMENT SECTION ****************************************/}
             <div className="m-8 rounded-md col-span-3">
               <div className="flex mb-8">
-                <div className="w-5/12">Sort here</div>
+                <div className="w-5/12 h-full">
+                  <span className="pt-8 mr-4">Sắp xếp theo</span>
+                  <SortDropdown sortType={sortType} changeSort={sort} />
+                </div>
                 <p className="font-bold text-xl text-gray-500 text-center">
                   Bình luận
                 </p>

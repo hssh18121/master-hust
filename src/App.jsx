@@ -8,8 +8,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/topics" element={<Topics />} />
-        <Route path="/newpost" element={<NewPost/>}/>
-        <Route path="/posts/detail/:id" element={<DetailPost />}/>
+        <Route path="/newpost" element={<NewPost />} />
+        <Route path="/posts/:id" element={<DetailPost />} />
         <Route path="/posts" element={<Posts />}></Route>
       </Route>
     </Routes>
