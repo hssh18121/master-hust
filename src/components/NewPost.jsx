@@ -58,7 +58,6 @@ function NewPost()
       .finally( () =>
       {
         navigate("/")
-      
     })
   }
 
@@ -69,18 +68,18 @@ function NewPost()
           <textarea
             id="message"
             rows="1"
-            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Nhập tiêu đề bài viết"
             required
             onChange={(e) => setTitle(e.target.value)}
           ></textarea>
         </div>
-        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-          <div className="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
+          <div className="px-4 py-2 bg-white rounded-b-lg">
             <textarea
               id="editor"
               rows="8"
-              className="block w-full px-0 text-sm text-gray-800 focus:outline-none bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+              className="block w-full px-0 text-sm text-gray-800 focus:outline-none bg-white border-0"
               placeholder="Nhập suy nghĩ của bạn"
               required
               onChange={(e) => setContent(e.target.value)}
@@ -116,8 +115,8 @@ function NewPost()
               ))}
             </ImageList>
           </div>
-          <div className="flex items-center w-full justify-between px-3 py-2 border-b dark:border-gray-600">
-            <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse dark:divide-gray-600">
+          <div className="flex items-center w-full justify-between px-3 py-2 border-b">
+            <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse">
               <div className="flex">
                 <Button
                   component="label"
@@ -134,7 +133,7 @@ function NewPost()
                 </Button>
                 <button
                   type="button"
-                  className="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  className="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100"
                 >
                   <svg
                     className="w-4 h-4"
@@ -160,7 +159,7 @@ function NewPost()
               onChange={(e) => {
                 setSelectedTopic(e.target.value);
               }}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             >
               <option selected={selectedTopic === undefined}>
                 Chọn chủ đề
@@ -182,7 +181,7 @@ function NewPost()
                 setSelectedSubject(e.target.value);
               }}
               id="subject"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             >
               <option selected={selectedSubject === undefined}>
                 Chọn môn học
@@ -201,7 +200,7 @@ function NewPost()
         </div>
         <button
           onClick={handleSavePost}
-          className="inline-flex items-center px-5 py-2.5  bg-add text-sm font-medium text-center text-white text-whiterounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+          className="inline-flex items-center px-5 py-2.5  bg-add text-sm font-medium text-center text-white text-whiterounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
         >
           {isNewPost ? "Đăng bài" : "Lưu thay đổi"}
         </button>
