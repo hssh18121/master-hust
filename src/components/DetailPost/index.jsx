@@ -13,6 +13,7 @@ import { Loading } from "../../common";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import SortDropdown from "./SortDropdown";
+import { useStateValue } from "./../../context/StateProvider";
 
 function DetailPost() {
   const id = useParams().id;
@@ -41,6 +42,8 @@ function DetailPost() {
   }, [id, postingComment]);
 
 
+  const [{userId}, _] = useStateValue();
+
   const sort = (type) => {
     setSortType(type);
     type === "time"
@@ -54,6 +57,7 @@ function DetailPost() {
       : setComments(comments.sort((a, b) => b.like - a.like));
   };
 
+  console.log( post)
   return (
     <>
       {!loading ? (
@@ -68,7 +72,7 @@ function DetailPost() {
                       name={post.user.name}
                       createdAt={post.createdAt}
                     />
-                    <EditAndDeleteMenu />
+                    {userId === post.userRef.id && <EditAndDeleteMenu userId={post.user.id} postId={id} />}
                   </div>
                   <h2 className="text-md text-neutral-950 font-semibold">
                     {post.title}
