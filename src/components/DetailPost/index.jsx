@@ -27,6 +27,7 @@ function DetailPost() {
   useEffect(() => {
     getPostById(id)
       .then((data) => {
+        console.log(data)
         setPost(data);
       })
       .finally(() => setLoading(false));
@@ -39,10 +40,8 @@ function DetailPost() {
       .finally(() => setLoadingComments(false));
   }, [id, postingComment]);
 
-  console.log(comments);
 
   const sort = (type) => {
-    console.log("reached");
     setSortType(type);
     type === "time"
       ? setComments(
