@@ -25,12 +25,19 @@ function NewPost({mode})
   
   const isNewPost = mode==="new";
 
+  const fetchTopicsData = async () => {
+      const topicData = await getAllTopics()
+      setTopics(topicData)
+      console.log(topicData)
+  }
+
   React.useEffect(() => {
     setLoading( true );
+    fetchTopicsData()
     Promise.all([getPostById(id), getAllTopics()])
       .then( ( data ) =>
       {
-
+        console.log(data)
         setPost( data[0] );
         setSelectedTopic( data[0].topicRef.id )
         setSelectedSubject(data[0].subjectRef.id);
