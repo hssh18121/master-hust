@@ -34,6 +34,7 @@ export async function getPostById(id) {
   }
   if (data.userRef !== undefined) {
     const userSnapshot = await data.userRef.get();
+    console.log(data.userRef.id)
     const userData = userSnapshot.data();
     data = { ...data, user: userData };
   }
