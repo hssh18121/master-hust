@@ -30,7 +30,8 @@ function DetailPost() {
       .then((data) => {
         console.log(data)
         setPost(data);
-      })
+      } )
+      .catch(err=>console.log(err))
       .finally(() => setLoading(false));
   }, [id]);
 
