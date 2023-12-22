@@ -25,12 +25,12 @@ export async function getPostById(id) {
   if (data.subjectRef !== undefined) {
     const subjectSnapshot = await data.subjectRef.get();
     const subjectData = subjectSnapshot.data();
-    if (subjectData.topicRef !== undefined) {
+    if ( subjectData && subjectData.topicRef) {
       const topicSnapshot = await subjectData.topicRef.get();
       const topicData = topicSnapshot.data();
-      data = { ...data, topic: topicData.name ? topicData.name : "" };
+      data = { ...data, topic: topicData && topicData.name ? topicData.name : "" };
     }
-    data = { ...data, subject: subjectData.name ? subjectData.name : "" };
+    data = { ...data, subject: subjectData && subjectData.name ? subjectData.name : "" };
   }
   if (data.userRef !== undefined) {
     const userSnapshot = await data.userRef.get();
