@@ -28,7 +28,6 @@ function DetailPost() {
   useEffect(() => {
     getPostById(id)
       .then((data) => {
-        console.log(data)
         setPost(data);
       } )
       .catch(err=>console.log(err))
@@ -58,7 +57,6 @@ function DetailPost() {
       : setComments(comments.sort((a, b) => b.like - a.like));
   };
 
-  console.log( post)
   return (
     <>
       {!loading ? (

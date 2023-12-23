@@ -1,18 +1,18 @@
-import { BiLike, BiDislike } from "react-icons/bi";
+import { BiLike, BiDislike, BiSolidLike, BiSolidDislike } from "react-icons/bi";
 
 // eslint-disable-next-line react/prop-types
-const LikeDislike = ({ like, dislike }) => {
+const LikeDislike = ({ like, dislike, isLiked, isDisliked }) => {
   return (
     <div className="flex gap-4 items-center">
       <div className="flex gap-1 items-center text-gray-400">
         <span className="cursor-pointer text-lg">
-          <BiLike />
+          { isLiked ? <BiSolidLike/> : <BiLike />}
         </span>
         <p className="text-sm">{like}</p>
       </div>
       <div className="flex gap-1 items-center text-gray-400">
         <span className="cursor-pointer text-lg">
-          <BiDislike />
+          { isDisliked ? <BiSolidDislike/> : <BiDislike />}
         </span>
         <p className="text-sm">{dislike}</p>
       </div>

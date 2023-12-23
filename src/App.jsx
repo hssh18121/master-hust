@@ -6,20 +6,33 @@ import { getNumberOfPosts } from "./services/PostService";
 import { useStateValue } from "./context/StateProvider";
 import { actionType } from "./context/reducer";
 import { useEffect } from "react";
+import { getLikedOrDislikedCommentsByUserId, getLikedPostsByUserId } from "./services/LikeService";
 
 function App() {
   const [, dispatch] = useStateValue()
 
-  const handleSetNumberOfPosts = async () => {
+  const handleInitialContext = async () => {
     const numberOfPosts = await getNumberOfPosts()
     dispatch({
       type: actionType.SET_NUMBER,
       payload: numberOfPosts
     })
+    const likedPosts = await getLikedPostsByUserId('7begC0zuZY0c8Qd2GIRm')
+    console.log(likedPosts)
+    dispatch({
+      type: actionType.SET_LIKED_POSTS,
+      payload: likedPosts
+    })
+    const likedOrDislikedComments = await getLikedOrDislikedCommentsByUserId('7begC0zuZY0c8Qd2GIRm')
+    console.log(likedOrDislikedComments)
+    dispatch({
+      type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
+      payload: likedOrDislikedComments
+    })
   }
 
   useEffect(() => {
-    handleSetNumberOfPosts();
+    handleInitialContext();
   }, []);
 
   return (
