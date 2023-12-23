@@ -1,14 +1,57 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Creator from "./Creator";
 import { FiChevronsUp, FiChevronsDown } from "react-icons/fi";
 import LikeDislike from "./LikeDislike";
 import SubComment from "./SubComment";
 import CommentForm from "./CommentForm";
+import { getNumberOfDislikeByCommentId, getNumberOfLikesByCommentId } from "../../services/LikeService";
+import { useStateValue } from "../../context/StateProvider";
 
 const Comment = ({ comment, postingComment, setPostingComment }) => {
   const [hideReplies, setHideReplies] = useState(true);
   const [newReply, setNewReply] = useState(false);
+  const [like, setLike] = useState(0);
+  const [dislike, setDislike] = useState(0);
+  const [{ likedOrDislikedComments, userId }] = useStateValue()
+  const [isLiked, setIsLiked] = useState(false)
+  const [isDisliked, setIsDisliked] = useState(false)
+
+  function checkLikeStatus() {
+    console.log("Inside check like function")
+    console.log(likedOrDislikedComments)
+    likedOrDislikedComments.forEach(likeOrDislikedComment => {
+      console.log("Inside inner check like function")
+      if(likeOrDislikedComment.commentId == comment.id && likeOrDislikedComment.userId == userId) {
+        if(likeOrDislikedComment.status === true) {
+          console.log(`comment with id ${comment.id} has user like it`)
+          setIsLiked(true)
+        }
+        else {
+          console.log(`comment with id ${comment.id} has user dislike it`)
+          setIsDisliked(true)
+        }
+      }
+    })
+  }
+
+  async function getLikeNumberForComment() {
+    return await getNumberOfLikesByCommentId(comment.id)
+  }
+
+  async function getDislikeNumberForComment() {
+    return await getNumberOfDislikeByCommentId(comment.id)
+  }
+
+  useEffect(() => {
+    getLikeNumberForComment(comment.id).then((likeNumber) => {
+      setLike(likeNumber)
+    })
+    getDislikeNumberForComment(comment.id).then((dislikeNumber) => {
+      setDislike(dislikeNumber)
+    })
+    checkLikeStatus()
+   }, []);
 
   const handleToggleReplies = () => setHideReplies(!hideReplies);
   const handleToggleReplyForm = () => setNewReply(!newReply);
@@ -26,7 +69,7 @@ const Comment = ({ comment, postingComment, setPostingComment }) => {
           {comment.content.trim()}
         </p>
         <div className="flex justify-between items-center">
-          <LikeDislike like={comment.like} dislike={comment.dislike} />
+          <LikeDislike like={like} dislike={dislike} isLiked={isLiked} isDisliked={isDisliked} />
           <div className="flex gap-4 text-sm text-blue-500">
             {comment.subComments.length > 0 ? (
               <div

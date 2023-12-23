@@ -3,6 +3,8 @@ export const actionType = {
   // SET_DATA_GOOGLE_EARTH_ENGINE: 'SET_DATA_GOOGLE_EARTH_ENGINE',
   SET_NUMBER: "SET_NUMBER",
   SET_USER: "SET_USER",
+  SET_LIKED_POSTS: "SET_LIKED_POSTS",
+  SET_LIKED_OR_DISLIKED_COMMENTS: "SET_LIKED_OR_DISLIKED_COMMENTS"
 };
 
 const reducer = (state, action) => {
@@ -22,6 +24,16 @@ const reducer = (state, action) => {
       return {
         ...state,
         userId: action.payload,
+      }
+    case actionType.SET_LIKED_POSTS:
+      return {
+        ...state,
+        likedPosts: action.payload,
+      }
+    case actionType.SET_LIKED_OR_DISLIKED_COMMENTS:
+      return {
+        ...state,
+        likedOrDislikedComments: action.payload,
       }
     default:
       return state;

@@ -1,6 +1,7 @@
 import { paginate, create, all, getData, findById, update } from "./BaseService";
 import { firestore } from "../config/firebase";
 import { getNumberOfCommentsByPostId } from "./CommentService";
+import { getNumberOfLikesByPostId } from "./LikeService";
 
 export async function getPosts(currentPage) {
   let query = all("posts");
@@ -33,8 +34,7 @@ export async function getPostById(id) {
     data = { ...data, subject: subjectData && subjectData.name ? subjectData.name : "" };
   }
   if (data.userRef !== undefined) {
-    const userSnapshot = await data.userRef.get();
-    console.log(data.userRef.id)
+    const userSnapshot = await data.userRef.get();   
     const userData = userSnapshot.data();
     data = { ...data, user: userData };
   }
@@ -52,6 +52,13 @@ export async function getPostsByTopicId(topicId) {
 
   const data = getData(query);
   return data;
+}
+
+export async function getPostsByUserId(userId) {
+  const userRef = firestore.doc(`users/${userId}`)
+  const query = await all("posts").where("userRef", "==", userRef);
+  const data = await getData(query)
+  return data
 }
 
 export async function getPostsBySubjectId(subjectId) {
@@ -72,7 +79,6 @@ export async function createPost({ title, content, image, subjectId, topicId, us
     subjectRef: subjectRef,
     topicRef: topicRef,
     userRef: userRef,
-    like: Math.floor(Math.random() * 101),
   }
   create("posts", postData);
 }
@@ -100,8 +106,9 @@ export async function getPostsWithInfo(currentPage) {
         const userData = userSnapshot.data();
         postWithInfo = { ...postWithInfo, user: userData };
       }
-      const numberOfComment = await getNumberOfCommentsByPostId(post.id)
-      postWithInfo = {...postWithInfo, comment: numberOfComment}
+      const numberOfComments = await getNumberOfCommentsByPostId(post.id)
+      const numberOfLikes = await getNumberOfLikesByPostId(post.id)
+      postWithInfo = {...postWithInfo, comment: numberOfComments, like: numberOfLikes}
       return postWithInfo;
     })
   );
