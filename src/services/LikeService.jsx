@@ -1,4 +1,4 @@
-import { all, create, getData } from "./BaseService";
+import { all, create, deleteById, getData } from "./BaseService";
 import { getCommentsByUserId } from "./CommentService";
 import { getPostsByUserId } from "./PostService";
 
@@ -40,7 +40,7 @@ export async function getNumberOfDislikesByCommentId(commentId) {
     return numberOfDislikes;
 }
 
-export async function getNumberOfPostLikeUserReceive(userId) {
+export async function getNumberOfPostLikesUserReceive(userId) {
     const posts = await getPostsByUserId(userId)
     let totalNumberOfLikes = 0
     for(const post of posts) {
@@ -78,10 +78,22 @@ export async function likePost(userId = "7begC0zuZY0c8Qd2GIRm", postId) {
     create("user_posts", likeData)
 }
 
+export async function unlikePost(userId = "7begC0zuZY0c8Qd2GIRm", postId) {
+    const likeRecord = await all("user_posts", "postId").where("userId", "==", userId).where("postId", "==", postId).get()
+    if(likeRecord.docs.length > 0) {
+        for (const likeDoc of likeRecord.docs) {
+            await deleteById("user_posts", likeDoc.id)
+        }
+    }
+}
+
 export async function likeOrDislikeComment(userId = "7begC0zuZY0c8Qd2GIRm", commentId, likeStatus) {
-    const likeRecord = await all("user_comments").where("userId", "==", userId).where("commentId", "==", commentId).get()
-    if(likeRecord.exists) {
-        await likeRecord.delete()
+    const likeRecord = await all("user_comments", "commentId").where("userId", "==", userId).where("commentId", "==", commentId).get()
+    if(likeRecord.docs.length > 0) {
+        for (const likeDoc of likeRecord.docs) {
+            await deleteById("user_comments", likeDoc.id)
+        }
+        console.log(likeRecord)
         const likeData = {
             userId: userId,
             commentId: commentId,
@@ -96,5 +108,16 @@ export async function likeOrDislikeComment(userId = "7begC0zuZY0c8Qd2GIRm", comm
             likeStatus: likeStatus
         }
         create("user_comments", likeData)
+    }
+}
+
+export async function unlikeOrUndislikeComment(userId = "7begC0zuZY0c8Qd2GIRm", commentId, likeStatus) {
+    const likeRecord = await all("user_comments", "commentId").where("userId", "==", userId).where("commentId", "==", commentId).where("likeStatus", "==", likeStatus).get()
+    if(likeRecord.docs.length > 0) {
+        for (const likeDoc of likeRecord.docs) {
+            await deleteById("user_comments", likeDoc.id)
+        }
+        console.log(likeRecord)
+        console.log("Record deleted")
     }
 }

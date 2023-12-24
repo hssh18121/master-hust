@@ -5,7 +5,7 @@ import { FiChevronsUp, FiChevronsDown } from "react-icons/fi";
 import LikeDislike from "./LikeDislike";
 import SubComment from "./SubComment";
 import CommentForm from "./CommentForm";
-import { getNumberOfDislikeByCommentId, getNumberOfLikesByCommentId } from "../../services/LikeService";
+import { getNumberOfDislikesByCommentId, getNumberOfLikesByCommentId, likeOrDislikeComment, unlikeOrUndislikeComment } from "../../services/LikeService";
 import { useStateValue } from "../../context/StateProvider";
 
 const Comment = ({ comment, postingComment, setPostingComment }) => {
@@ -18,12 +18,10 @@ const Comment = ({ comment, postingComment, setPostingComment }) => {
   const [isDisliked, setIsDisliked] = useState(false)
 
   function checkLikeStatus() {
-    console.log("Inside check like function")
     console.log(likedOrDislikedComments)
     likedOrDislikedComments.forEach(likeOrDislikedComment => {
-      console.log("Inside inner check like function")
       if(likeOrDislikedComment.commentId == comment.id && likeOrDislikedComment.userId == userId) {
-        if(likeOrDislikedComment.status === true) {
+        if(likeOrDislikedComment.likeStatus === true) {
           console.log(`comment with id ${comment.id} has user like it`)
           setIsLiked(true)
         }
@@ -40,8 +38,40 @@ const Comment = ({ comment, postingComment, setPostingComment }) => {
   }
 
   async function getDislikeNumberForComment() {
-    return await getNumberOfDislikeByCommentId(comment.id)
+    return await getNumberOfDislikesByCommentId(comment.id)
   }
+
+  const handleLike = (newIsLiked) => {
+    if (newIsLiked) {
+      likeOrDislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true)
+      setLike(like + 1);
+      if (isDisliked) {
+        setDislike(dislike - 1);
+        unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false)
+        setIsDisliked(false);
+      }
+    } else {
+      unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true)
+      setLike(like - 1);
+    }
+    setIsLiked(newIsLiked);
+  };
+
+  const handleDislike = (newIsDisliked) => {
+    if (newIsDisliked) {
+      likeOrDislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false)
+      setDislike(dislike + 1);
+      if (isLiked) {
+        setLike(like - 1);
+        unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true)
+        setIsLiked(false);
+      }
+    } else {
+      unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false)
+      setDislike(dislike - 1);
+    }
+    setIsDisliked(newIsDisliked);
+  };
 
   useEffect(() => {
     getLikeNumberForComment(comment.id).then((likeNumber) => {
@@ -69,7 +99,14 @@ const Comment = ({ comment, postingComment, setPostingComment }) => {
           {comment.content.trim()}
         </p>
         <div className="flex justify-between items-center">
-          <LikeDislike like={like} dislike={dislike} isLiked={isLiked} isDisliked={isDisliked} />
+          <LikeDislike 
+            like={like} 
+            dislike={dislike} 
+            isLiked={isLiked} 
+            isDisliked={isDisliked} 
+            onLike={handleLike}
+            onDislike={handleDislike}
+          />
           <div className="flex gap-4 text-sm text-blue-500">
             {comment.subComments.length > 0 ? (
               <div
