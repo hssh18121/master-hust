@@ -6,7 +6,6 @@ import { getPostsWithInfo } from "../services/PostService";
 import Post from "./Post";
 import { Loading } from "../common";
 import { useStateValue } from "../context/StateProvider";
-import { getNumberOfLikeUserReceive } from "../services/LikeService";
 
 const Posts = () => {
   const location = useLocation();
@@ -36,7 +35,6 @@ const Posts = () => {
 
   useEffect(() => {
     setLoading(true);
-    getNumberOfLikeUserReceive("V3rT51rJfLoLIDqMwWIO")
     fetchData();
   }, [currentPage]);
 

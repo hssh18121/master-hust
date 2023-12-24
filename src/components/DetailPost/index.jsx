@@ -14,6 +14,7 @@ import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import SortDropdown from "./SortDropdown";
 import { useStateValue } from "./../../context/StateProvider";
+import { getNumberOfLikesByPostId, likePost, unlikePost } from "../../services/LikeService";
 
 function DetailPost() {
   const id = useParams().id;
@@ -23,6 +24,29 @@ function DetailPost() {
   const [postingComment, setPostingComment] = useState(false);
   const [comments, setComments] = useState([]);
   const [sortType, setSortType] = useState("time");
+  const [isLiked, setIsLiked] = useState(false)
+  const [upvoteNum, setUpvoteNum] = useState(0)
+  const [{ likedPosts, userId }] = useStateValue()
+
+  function checkLikeStatus() {
+    likedPosts.forEach(likedPost => {
+      if(likedPost.postId == id && likedPost.userId == userId) {
+        setIsLiked(true)
+      }
+    })
+  }
+
+  function handleLike() {
+    if(isLiked) {
+      setIsLiked(false)
+      setUpvoteNum(upvoteNum - 1)
+      unlikePost(userId, id)
+    } else {
+      setIsLiked(true)
+      setUpvoteNum(upvoteNum + 1)
+      likePost(userId, id)
+    }
+  }
 
   const hide = true;
   useEffect(() => {
@@ -32,7 +56,18 @@ function DetailPost() {
       } )
       .catch(err=>console.log(err))
       .finally(() => setLoading(false));
+
+    checkLikeStatus()
   }, [id]);
+
+  useEffect(() => {
+    getNumberOfLikesByPostId("7begC0zuZY0c8Qd2GIRm")
+      .then((data) => {
+        setUpvoteNum(data)
+      })
+      .catch(err=>console.log(err))
+      .finally(() => setLoading(false));
+  }, [id])
 
   useEffect(() => {
     setLoadingComments(true);
@@ -40,9 +75,6 @@ function DetailPost() {
       .then((data) => setComments(data))
       .finally(() => setLoadingComments(false));
   }, [id, postingComment]);
-
-
-  const [{userId}, _] = useStateValue();
 
   const sort = (type) => {
     setSortType(type);
@@ -87,14 +119,14 @@ function DetailPost() {
                     </div>
                     <div className="text-neutral-400 text-xs flex items-center">
                       <BiUpArrowAlt size={20} />
-                      {post.like ? post.like : 0}
+                      {upvoteNum}
                     </div>
                   </div>
 
                   {hide && (
-                    <button className="text-sm text-white bg-blue-500 px-2 py-1 pr-3 rounded-sm flex">
+                    <button className="text-sm text-white bg-blue-500 px-2 py-1 pr-3 rounded-sm flex" onClick={handleLike}>
                       <BiUpArrowAlt size={20} />
-                      Upvote
+                      {isLiked ? "Hủy Upvote" : "Upvote"}
                     </button>
                   )}
                 </div>
