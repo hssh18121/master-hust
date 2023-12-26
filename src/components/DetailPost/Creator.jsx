@@ -77,8 +77,8 @@ function UserInfoDialog( { avatarURL, name, userId} )
             <img src={avatarURL} className="w-[100px] h-[100px]"></img>
             <div className="p-4">
               <h2 className="font-semibold text-lg">{name}</h2>
-              <div>MSSV: </div>
-              <div>Khóa: </div>
+              <div>MSSV: 20196776</div>
+              <div>Khóa: 64</div>
             </div>
           </div>
           <div className="flex flex-col p-8">
