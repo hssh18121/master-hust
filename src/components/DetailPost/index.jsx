@@ -14,7 +14,11 @@ import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import SortDropdown from "./SortDropdown";
 import { useStateValue } from "./../../context/StateProvider";
-import { getNumberOfLikesByPostId, likePost, unlikePost } from "../../services/LikeService";
+import {
+  getNumberOfLikesByPostId,
+  likePost,
+  unlikePost,
+} from "../../services/LikeService";
 
 function DetailPost() {
   const id = useParams().id;
@@ -24,50 +28,48 @@ function DetailPost() {
   const [postingComment, setPostingComment] = useState(false);
   const [comments, setComments] = useState([]);
   const [sortType, setSortType] = useState("time");
-  const [isLiked, setIsLiked] = useState(false)
-  const [upvoteNum, setUpvoteNum] = useState(0)
-  const [{ likedPosts, userId }] = useStateValue()
+  const [isLiked, setIsLiked] = useState(false);
+  const [upvoteNum, setUpvoteNum] = useState(0);
+  const [{ likedPosts, userId }] = useStateValue();
 
   function checkLikeStatus() {
-    likedPosts.forEach(likedPost => {
-      if(likedPost.postId == id && likedPost.userId == userId) {
-        setIsLiked(true)
+    likedPosts.forEach((likedPost) => {
+      if (likedPost.postId == id && likedPost.userId == userId) {
+        setIsLiked(true);
       }
-    })
+    });
   }
 
   function handleLike() {
-    if(isLiked) {
-      setIsLiked(false)
-      setUpvoteNum(upvoteNum - 1)
-      unlikePost(userId, id)
+    if (isLiked) {
+      setIsLiked(false);
+      setUpvoteNum(upvoteNum - 1);
+      unlikePost(userId, id);
     } else {
-      setIsLiked(true)
-      setUpvoteNum(upvoteNum + 1)
-      likePost(userId, id)
+      setIsLiked(true);
+      setUpvoteNum(upvoteNum + 1);
+      likePost(userId, id);
     }
   }
 
   const hide = true;
-  useEffect(() => {
-    getPostById(id)
+  useEffect( () =>
+  {
+    setLoading(true)
+    Promise.all([
+      getPostById(id),
+      getNumberOfLikesByPostId("7begC0zuZY0c8Qd2GIRm"),
+    ])
       .then((data) => {
-        setPost(data);
-      } )
-      .catch(err=>console.log(err))
-      .finally(() => setLoading(false));
-
-    checkLikeStatus()
-  }, [id]);
-
-  useEffect(() => {
-    getNumberOfLikesByPostId("7begC0zuZY0c8Qd2GIRm")
-      .then((data) => {
-        setUpvoteNum(data)
+        console.log(data);
+        setPost(data[0]);
+        setUpvoteNum(data[1]);
       })
-      .catch(err=>console.log(err))
+      .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, [id])
+
+    checkLikeStatus();
+  }, [id]);
 
   useEffect(() => {
     setLoadingComments(true);
@@ -99,11 +101,15 @@ function DetailPost() {
                 <div>
                   <div className="flex justify-between">
                     <Creator
+                      openUserDialog={true}
                       avatarURL={post.user.avatarUrl}
                       name={post.user.name}
                       createdAt={post.createdAt}
+                      userId={post.userRef.id}
                     />
-                    {userId === post.userRef.id && <EditAndDeleteMenu userId={post.user.id} postId={id} />}
+                    {userId === post.userRef.id && (
+                      <EditAndDeleteMenu userId={post.user.id} postId={id} />
+                    )}
                   </div>
                   <h2 className="text-md text-neutral-950 font-semibold">
                     {post.title}
@@ -124,7 +130,10 @@ function DetailPost() {
                   </div>
 
                   {hide && (
-                    <button className="text-sm text-white bg-blue-500 px-2 py-1 pr-3 rounded-sm flex" onClick={handleLike}>
+                    <button
+                      className="text-sm text-white bg-blue-500 px-2 py-1 pr-3 rounded-sm flex"
+                      onClick={handleLike}
+                    >
                       <BiUpArrowAlt size={20} />
                       {isLiked ? "Hủy Upvote" : "Upvote"}
                     </button>

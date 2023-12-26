@@ -90,9 +90,11 @@ const Comment = ({ comment, postingComment, setPostingComment }) => {
       <div className="w-full bg-white py-4 px-8 shadow-lg mb-2 border-l-4 border-add">
         <div className="mb-4">
           <Creator
+            openUserDialog= {true}
             avatarURL={comment.user.avatarUrl}
             name={comment.user.name}
             createdAt={comment.createdAt}
+            userId= {comment.userRef.id}
           />
         </div>
         <p className="text-sm text-justify border-b border-gray-200 pb-4 mb-3">

@@ -12,7 +12,7 @@ const Dashboard = () => {
   }, [navigate, url.pathname]);
 
   return (
-    <div className="h-full">
+    <div className="h-full font-montserrat">
       <Header />
       <div className="flex h-[90vh]">
         <Sidebar />
