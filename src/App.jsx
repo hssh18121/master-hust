@@ -5,7 +5,7 @@ import { DetailPost, Topics, Posts, NewPost } from "./components";
 import { getNumberOfPosts } from "./services/PostService";
 import { useStateValue } from "./context/StateProvider";
 import { actionType } from "./context/reducer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getLikedOrDislikedCommentsByUserId,
   getLikedPostsByUserId,
@@ -13,6 +13,7 @@ import {
 
 function App() {
   const [, dispatch] = useStateValue();
+  const [searchResult, setSearchResult] = useState("");
 
   const handleInitialContext = async () => {
     const numberOfPosts = await getNumberOfPosts();
@@ -43,14 +44,21 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<Layout setSearchResult={setSearchResult} />}>
         <Route path="/topics" element={<Topics />} />
         <Route path="/newpost" element={<NewPost mode="new" />} />
         <Route path="/editPost/:id" element={<NewPost mode="edit" />} />
 
         <Route path="/posts/:id" element={<DetailPost />} />
-        <Route path="/posts" element={<Posts />}></Route>
-        <Route path="/search" element={<Posts />}></Route>
+        <Route
+          path="/posts"
+          element={
+            <Posts
+              searchResult={searchResult}
+              setSearchResult={setSearchResult}
+            />
+          }
+        ></Route>
       </Route>
     </Routes>
   );

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaHistory } from "react-icons/fa";
 import { OrangeButton } from "../common";
 import { useEffect, useState } from "react";
 import {
@@ -10,21 +10,24 @@ import {
 import { useStateValue } from "../context/StateProvider";
 import { useRef } from "react";
 
-const Header = () => {
+const Header = ({ setSearchResult }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
   const [showHistoryStatus, setShowHistoryStatus] = useState("hidden");
   const [{ userId }] = useStateValue();
   const navigate = useNavigate();
-  const showSearchHistory = () => {
-    if (showHistoryStatus === "hidden") setShowHistoryStatus("");
-  };
+
   const search = (e) => {
     e.preventDefault();
-    navigate(`/search`, { searchTerm: searchTerm });
-    addDataToSearchHistory(userId, searchTerm);
-    setSearchHistory([searchTerm, ...searchHistory]);
-    setShowHistoryStatus("hidden");
+    if (searchTerm) {
+      addDataToSearchHistory(userId, searchTerm);
+      setSearchHistory([searchTerm, ...searchHistory]);
+      setShowHistoryStatus("hidden");
+      setSearchResult(searchTerm);
+    } else {
+      navigate("/");
+      setSearchResult("");
+    }
   };
 
   useEffect(() => {
@@ -39,12 +42,17 @@ const Header = () => {
 
   const fetchData = async () => {
     const historyList = await getSearchHistoryByUserId(userId);
-    console.log(historyList);
     setSearchHistory(historyList);
   };
   return (
     <div className="flex justify-between px-4 py-2 h-[10vh] shadow-lg items-center relative z-10">
-      <Link to="/">
+      <Link
+        to="/"
+        onClick={() => {
+          setSearchResult("");
+          setSearchTerm("");
+        }}
+      >
         <img src="/logo.png" alt="Logo" className="mb-2 md:mb-0" />
       </Link>
       <form className="relative" onSubmit={search}>
@@ -69,11 +77,12 @@ const Header = () => {
             <li
               className="px-4 py-2 hover:bg-gray-200 hover:cursor-pointer"
               onClick={(e) => {
-                navigate("/search", { searchTerm: e.target.innerText });
                 setSearchTerm(e.target.innerText);
                 setShowHistoryStatus("hidden");
+                setSearchResult(e.target.innerText);
               }}
             >
+              <FaHistory className="inline mr-2" />
               {history}
             </li>
           ))}
