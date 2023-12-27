@@ -12,17 +12,19 @@ import {
   unlikeOrUndislikeComment,
 } from "../../services/LikeService";
 import { useStateValue } from "../../context/StateProvider";
+import { actionType } from "../../context/reducer";
 
 const Comment = ({ comment, postingComment, setPostingComment }) => {
   const [hideReplies, setHideReplies] = useState(true);
   const [newReply, setNewReply] = useState(false);
   const [like, setLike] = useState(0);
   const [dislike, setDislike] = useState(0);
-  const [{ likedOrDislikedComments, userId }] = useStateValue();
+  const [{ likedOrDislikedComments, userId }, dispatch] = useStateValue();
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
 
   function checkLikeStatus() {
+    console.log("Like or dislike state: ")
     console.log(likedOrDislikedComments);
     likedOrDislikedComments.forEach((likeOrDislikedComment) => {
       if (
@@ -48,34 +50,65 @@ const Comment = ({ comment, postingComment, setPostingComment }) => {
     return await getNumberOfDislikesByCommentId(comment.id);
   }
 
-  const handleLike = (newIsLiked) => {
+  const handleLike = async (newIsLiked) => {
     if (newIsLiked) {
-      likeOrDislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true);
+      await likeOrDislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true);
       setLike(like + 1);
+      likedOrDislikedComments.push({id: 'new', commentId: comment.id, userId: userId, likeStatus: true })
+      dispatch({
+        type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
+        payload: likedOrDislikedComments,
+      });
       if (isDisliked) {
         setDislike(dislike - 1);
-        unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false);
+        const updatedLikedOrDislikedComments = likedOrDislikedComments.filter((e) => (e.commentId !== comment.id || e.likeStatus !== false))
+        dispatch({
+          type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
+          payload: updatedLikedOrDislikedComments,
+        });
+        await unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false);
         setIsDisliked(false);
       }
     } else {
-      unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true);
+      await unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true);
+      const updatedLikedOrDislikedComments = likedOrDislikedComments.filter((e) => (e.commentId !== comment.id))
       setLike(like - 1);
+      dispatch({
+        type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
+        payload: updatedLikedOrDislikedComments,
+      });
     }
     setIsLiked(newIsLiked);
   };
 
-  const handleDislike = (newIsDisliked) => {
+  const handleDislike = async (newIsDisliked) => {
     if (newIsDisliked) {
-      likeOrDislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false);
+      await likeOrDislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false);
+      likedOrDislikedComments.push({id: 'new', commentId: comment.id, userId: userId, likeStatus: false })
+      dispatch({
+        type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
+        payload: likedOrDislikedComments,
+      });
       setDislike(dislike + 1);
       if (isLiked) {
         setLike(like - 1);
-        unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true);
+        await unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, true);
+        const updatedLikedOrDislikedComments = likedOrDislikedComments.filter((e) => (e.commentId !== comment.id || e.likeStatus !== true))
+        dispatch({
+          type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
+          payload: updatedLikedOrDislikedComments,
+        });
+        console.log(updatedLikedOrDislikedComments)
         setIsLiked(false);
       }
     } else {
-      unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false);
+      await unlikeOrUndislikeComment("7begC0zuZY0c8Qd2GIRm", comment.id, false);
       setDislike(dislike - 1);
+      const updatedLikedOrDislikedComments = likedOrDislikedComments.filter((e) => (e.commentId !== comment.id))
+      dispatch({
+        type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
+        payload: updatedLikedOrDislikedComments,
+      });
     }
     setIsDisliked(newIsDisliked);
   };

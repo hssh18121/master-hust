@@ -32,6 +32,9 @@ function App() {
       type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
       payload: likedOrDislikedComments,
     });
+    console.log("Initial state:")
+    console.log(likedPosts)
+    // console.log(likedOrDislikedComments)
   };
 
   useEffect(() => {
