@@ -8,6 +8,8 @@ import { getSubjectsByTopicId } from "../services/SubjectService";
 import {createPost, updatePost} from "../services/PostService"
 import { useNavigate, useParams } from "react-router-dom";
 import { getPostById } from "../services/PostService"
+import { useStateValue } from "../context/StateProvider";
+import { actionType } from "../context/reducer";
 
 function NewPost({mode})
 {
@@ -26,13 +28,13 @@ function NewPost({mode})
 
   const [content, setContent] = React.useState("");
   const [post, setPost] = React.useState(undefined);
+  const [{ numberOfPosts }, dispatch] = useStateValue()
   
   const isNewPost = mode==="new";
 
   const fetchTopicsData = async () => {
       const topicData = await getAllTopics()
       setTopics(topicData)
-      console.log(topicData)
   }
 
   React.useEffect(() => {
@@ -95,6 +97,10 @@ function NewPost({mode})
             console.error(error);
           })
           .finally(() => {
+            dispatch({
+              type: actionType.SET_NUMBER,
+              payload: numberOfPosts + 1,
+            });
             navigate("/");
           })
       : updatePost({

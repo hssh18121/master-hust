@@ -19,6 +19,7 @@ import {
   likePost,
   unlikePost,
 } from "../../services/LikeService";
+import { actionType } from "../../context/reducer";
 
 function DetailPost() {
   const id = useParams().id;
@@ -30,7 +31,7 @@ function DetailPost() {
   const [sortType, setSortType] = useState("time");
   const [isLiked, setIsLiked] = useState(false);
   const [upvoteNum, setUpvoteNum] = useState(0);
-  const [{ likedPosts, userId }] = useStateValue();
+  const [{ likedPosts, userId }, dispatch] = useStateValue();
 
   function checkLikeStatus() {
     likedPosts.forEach((likedPost) => {
@@ -40,15 +41,24 @@ function DetailPost() {
     });
   }
 
-  function handleLike() {
+  async function handleLike() {
     if (isLiked) {
       setIsLiked(false);
       setUpvoteNum(upvoteNum - 1);
-      unlikePost(userId, id);
+      await unlikePost(userId, id);
+      dispatch({
+        type: actionType.SET_LIKED_POSTS,
+        payload: likedPosts.filter((e) => e.postId !== id),
+      });
     } else {
       setIsLiked(true);
       setUpvoteNum(upvoteNum + 1);
-      likePost(userId, id);
+      await likePost(userId, id);
+      likedPosts.push({ id: 'newlike', userId: userId, postId: id })
+      dispatch({
+        type: actionType.SET_LIKED_POSTS,
+        payload: likedPosts,
+      });
     }
   }
 
@@ -58,7 +68,7 @@ function DetailPost() {
     setLoading(true)
     Promise.all([
       getPostById(id),
-      getNumberOfLikesByPostId("7begC0zuZY0c8Qd2GIRm"),
+      getNumberOfLikesByPostId(id),
     ])
       .then((data) => {
         console.log(data);
