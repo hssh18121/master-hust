@@ -16,6 +16,8 @@ const Posts = ({ searchResult, setSearchResult }) => {
   const [loading, setLoading] = useState(true);
   const [{ numberOfPosts }] = useStateValue();
   const [postNumber, setPostNumber] = useState(numberOfPosts);
+  console.log(postNumber);
+  console.log(numberOfPosts);
 
   const colors = [
     "#FCFAEE",
@@ -44,7 +46,8 @@ const Posts = ({ searchResult, setSearchResult }) => {
   }, [currentPage]);
 
   async function fetchData() {
-    if (!searchResult)
+    if (!searchResult) {
+      console.log("render");
       getPostsWithInfo(currentPage)
         .then((data) => {
           data = data.sort((a, b) => {
@@ -53,8 +56,10 @@ const Posts = ({ searchResult, setSearchResult }) => {
             else return b.createdAt.nanoseconds - a.createdAt.nanoseconds;
           });
           setPosts(data);
+          setPostNumber(numberOfPosts);
         })
         .finally(() => setLoading(false));
+    }
   }
 
   useEffect(() => {
@@ -85,7 +90,11 @@ const Posts = ({ searchResult, setSearchResult }) => {
           </div>
           <div className="flex flex-wrap p-4 items-center justify-center md:justify-end">
             <Pagination
-              count={parseInt((postNumber - 1) / 6) + 1}
+              count={
+                parseInt(
+                  ((searchResult ? postNumber : numberOfPosts) - 1) / 6
+                ) + 1
+              }
               color="primary"
               page={currentPage}
               onChange={handleChange}
