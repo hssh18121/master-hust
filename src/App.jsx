@@ -6,28 +6,33 @@ import { getNumberOfPosts } from "./services/PostService";
 import { useStateValue } from "./context/StateProvider";
 import { actionType } from "./context/reducer";
 import { useEffect } from "react";
-import { getLikedOrDislikedCommentsByUserId, getLikedPostsByUserId } from "./services/LikeService";
+import {
+  getLikedOrDislikedCommentsByUserId,
+  getLikedPostsByUserId,
+} from "./services/LikeService";
 
 function App() {
-  const [, dispatch] = useStateValue()
+  const [, dispatch] = useStateValue();
 
   const handleInitialContext = async () => {
-    const numberOfPosts = await getNumberOfPosts()
+    const numberOfPosts = await getNumberOfPosts();
     dispatch({
       type: actionType.SET_NUMBER,
-      payload: numberOfPosts
-    })
-    const likedPosts = await getLikedPostsByUserId('7begC0zuZY0c8Qd2GIRm')
+      payload: numberOfPosts,
+    });
+    const likedPosts = await getLikedPostsByUserId("7begC0zuZY0c8Qd2GIRm");
     dispatch({
       type: actionType.SET_LIKED_POSTS,
-      payload: likedPosts
-    })
-    const likedOrDislikedComments = await getLikedOrDislikedCommentsByUserId('7begC0zuZY0c8Qd2GIRm')
+      payload: likedPosts,
+    });
+    const likedOrDislikedComments = await getLikedOrDislikedCommentsByUserId(
+      "7begC0zuZY0c8Qd2GIRm"
+    );
     dispatch({
       type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
-      payload: likedOrDislikedComments
-    })
-  }
+      payload: likedOrDislikedComments,
+    });
+  };
 
   useEffect(() => {
     handleInitialContext();
@@ -37,11 +42,12 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/topics" element={<Topics />} />
-        <Route path="/newpost" element={<NewPost mode ="new"/>} />
+        <Route path="/newpost" element={<NewPost mode="new" />} />
         <Route path="/editPost/:id" element={<NewPost mode="edit" />} />
 
         <Route path="/posts/:id" element={<DetailPost />} />
         <Route path="/posts" element={<Posts />}></Route>
+        <Route path="/search" element={<Posts />}></Route>
       </Route>
     </Routes>
   );
