@@ -16,19 +16,17 @@ import moment from "moment";
 import { useStateValue } from "../../context/StateProvider";
 import { actionType } from "../../context/reducer";
 
-function UserInfoDialog( { avatarURL, name, userId} )
-{
-  const [{ openUserDialog }, dispatch] = useStateValue()
-  const [rating, setRating] = React.useState( {
+function UserInfoDialog({ avatarURL, name, userId }) {
+  const [{ openUserDialog }, dispatch] = useStateValue();
+  const [rating, setRating] = React.useState({
     upvote: 0,
     like: 0,
-    dislike:0
-  } )
-  const [loading, setLoading] = React.useState(true)
-  
-  React.useEffect( () =>
-  {
-    setLoading(true)
+    dislike: 0,
+  });
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    setLoading(true);
     Promise.all([
       getNumberOfPostLikesUserReceive(userId),
       getNumberOfCommentLikeUserReceive(userId),
@@ -42,18 +40,17 @@ function UserInfoDialog( { avatarURL, name, userId} )
         });
       })
       .catch((err) => console.error(err))
-      .finally(() => {setLoading(false)});
-    
-  },[userId])
-  const handleClose = () =>
-  {
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [userId]);
+  const handleClose = () => {
     dispatch({
       type: actionType.SET_OPEN_USER_DIALOG,
       payload: false,
     });
-  }
+  };
   const { upvote, like, dislike } = rating;
-
 
   return (
     <Dialog onClose={handleClose} open={openUserDialog}>
@@ -106,15 +103,15 @@ function UserInfoDialog( { avatarURL, name, userId} )
   );
 }
 
-function Creator({ userId, avatarURL, name, createdAt, openUserDialog }) {
+function Creator({ userId, avatarUrl, name, createdAt, openUserDialog }) {
   const [_, dispatch] = useStateValue();
+  console.log(avatarUrl);
 
   return (
     <>
       <div
         className="flex flex-row gap-4 cursor-pointer"
         onClick={(e) => {
-          console.log("clicked");
           openUserDialog &&
             dispatch({
               type: actionType.SET_OPEN_USER_DIALOG,
@@ -122,7 +119,7 @@ function Creator({ userId, avatarURL, name, createdAt, openUserDialog }) {
             });
         }}
       >
-        <img src={avatarURL} className="rounded-full w-8 h-8"></img>
+        <img src={avatarUrl} className="rounded-full w-8 h-8"></img>
         <div>
           <p className="font-semibold text-sm">{name}</p>
           <p className="text-[10px] font-medium text-neutral-500">
@@ -130,7 +127,11 @@ function Creator({ userId, avatarURL, name, createdAt, openUserDialog }) {
           </p>
         </div>
       </div>
-      <UserInfoDialog avatarURL={avatarURL} name={name} userId={userId}></UserInfoDialog>
+      <UserInfoDialog
+        avatarURL={avatarUrl}
+        name={name}
+        userId={userId}
+      ></UserInfoDialog>
     </>
   );
 }
