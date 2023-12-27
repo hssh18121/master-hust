@@ -10,6 +10,35 @@ export async function getPosts(currentPage) {
   return data;
 }
 
+export async function filterPostsByContent(searchContent, currentPage = 1) {
+  let query = all("posts");
+  const data = await getData(query)
+  const searchData = data.filter((post) => {
+    return post.content.toLowerCase().includes(searchContent.toLowerCase())
+  })
+  
+  const searchDataByPage =  searchData.slice((currentPage-1)*6, (currentPage-1)*6 + 6)
+  console.log(searchDataByPage)
+  return searchDataByPage
+}
+
+// export async function generateKeywordForPosts() {
+//   let query = all("posts")
+//   const data = await getData(query)
+//   for(const post of data) {
+//     let keywordArray = post.content.split(' ')
+//     keywordArray = keywordArray.map((e) => {
+//       return e.toLowerCase()
+//     })
+//     console.log(keywordArray)
+//     const postData = {
+//       ...post,
+//       searchKeywords: keywordArray
+//     }
+//     update("posts", post.id, postData)
+//   }
+// }
+
 export async function getNumberOfPosts() {
   const numberOfPosts = await all("posts")
     .get()

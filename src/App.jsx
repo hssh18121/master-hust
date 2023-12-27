@@ -18,13 +18,11 @@ function App() {
       payload: numberOfPosts
     })
     const likedPosts = await getLikedPostsByUserId('7begC0zuZY0c8Qd2GIRm')
-    console.log(likedPosts)
     dispatch({
       type: actionType.SET_LIKED_POSTS,
       payload: likedPosts
     })
     const likedOrDislikedComments = await getLikedOrDislikedCommentsByUserId('7begC0zuZY0c8Qd2GIRm')
-    console.log(likedOrDislikedComments)
     dispatch({
       type: actionType.SET_LIKED_OR_DISLIKED_COMMENTS,
       payload: likedOrDislikedComments
