@@ -193,7 +193,7 @@ const Comment = ({ comment, postingComment, setPostingComment }) => {
         ? null
         : comment.subComments.map((sub) => (
             <SubComment
-              sub={sub}
+              comment={sub}
               key={sub.id}
               commentUserName={comment.user.name}
             />
