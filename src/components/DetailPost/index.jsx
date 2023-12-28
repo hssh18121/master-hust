@@ -13,16 +13,17 @@ import { Loading } from "../../common";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import SortDropdown from "./SortDropdown";
-import { useStateValue } from "./../../context/StateProvider";
 import {
   getNumberOfLikesByPostId,
   likePost,
   unlikePost,
 } from "../../services/LikeService";
 import { actionType } from "../../context/reducer";
+import { useStateValue } from "../../context/StateProvider";
 
 function DetailPost() {
-  const id = useParams().id;
+  const postId = useParams().id
+  const [id, setId] = useState(postId)
   const [post, setPost] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [loadingComments, setLoadingComments] = useState(true);
@@ -34,11 +35,15 @@ function DetailPost() {
   const [{ likedPosts, userId }, dispatch] = useStateValue();
 
   function checkLikeStatus() {
-    likedPosts.forEach((likedPost) => {
-      if (likedPost.postId == id && likedPost.userId == userId) {
-        setIsLiked(true);
-      }
-    });
+    console.log("Inside this func")
+    if(likedPosts !== undefined && likedPosts.length > 0) {
+      likedPosts.forEach((likedPost) => {
+        console.log(`Liked post id: ${likedPost.postId} and userId: ${likedPost.userId}`)
+        if (likedPost.postId == id && likedPost.userId == userId) {
+          setIsLiked(true);
+        }
+      });
+    }
   }
 
   async function handleLike() {
@@ -54,17 +59,23 @@ function DetailPost() {
       setIsLiked(true);
       setUpvoteNum(upvoteNum + 1);
       await likePost(userId, id);
-      likedPosts.push({ id: 'newlike', userId: userId, postId: id })
+      const updatedLikedPosts = likedPosts.push({ id: 'newlike', userId: userId, postId: id })
       dispatch({
         type: actionType.SET_LIKED_POSTS,
-        payload: likedPosts,
+        payload: updatedLikedPosts,
       });
     }
   }
 
   const hide = true;
+
+  useEffect(() => {
+    checkLikeStatus()
+  }, [likedPosts])
+
   useEffect( () =>
   {
+    localStorage.setItem('id', id);
     setLoading(true)
     Promise.all([
       getPostById(id),
@@ -78,7 +89,11 @@ function DetailPost() {
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
 
-    checkLikeStatus();
+    console.log(`id: ${localStorage.getItem('id')}`)
+    setId(localStorage.getItem('id'))
+    return () => {
+      localStorage.removeItem('id');
+    };
   }, [id]);
 
   useEffect(() => {
