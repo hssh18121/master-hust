@@ -24,13 +24,13 @@ jobs:
       - name: Notify success on Teams
         if: success()
         run: |
-          curl -H 'Content-Type: application/json' \
-          -d "{\"text\": \"🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}.\nView the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{"text": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}.\nView the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
 
       - name: Notify failure on Teams
         if: failure()
         run: |
-          curl -H 'Content-Type: application/json' \
-          -d "{\"text\": \"🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}.\nView the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{"text": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}.\nView the run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
