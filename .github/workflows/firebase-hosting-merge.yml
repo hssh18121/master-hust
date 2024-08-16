@@ -31,15 +31,31 @@ jobs:
             "attachments": [
               {
                 "contentType": "application/vnd.microsoft.card.adaptive",
-                "contentUrl": null,
                 "content": {
                   "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
                   "type": "AdaptiveCard",
                   "version": "1.2",
                   "body": [
                     {
-                      "type": "TextBlock",
-                      "text": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
+                      "type": "ColumnSet",
+                      "columns": [
+                        {
+                          "type": "Column",
+                          "width": "stretch",
+                          "items": [
+                            {
+                              "type": "TextBlock",
+                              "text": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}.",
+                              "wrap": true
+                            },
+                            {
+                              "type": "TextBlock",
+                              "text": "View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).",
+                              "wrap": true
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
@@ -57,15 +73,31 @@ jobs:
             "attachments": [
               {
                 "contentType": "application/vnd.microsoft.card.adaptive",
-                "contentUrl": null,
                 "content": {
                   "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
                   "type": "AdaptiveCard",
                   "version": "1.2",
                   "body": [
                     {
-                      "type": "TextBlock",
-                      "text": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
+                      "type": "ColumnSet",
+                      "columns": [
+                        {
+                          "type": "Column",
+                          "width": "stretch",
+                          "items": [
+                            {
+                              "type": "TextBlock",
+                              "text": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}.",
+                              "wrap": true
+                            },
+                            {
+                              "type": "TextBlock",
+                              "text": "View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).",
+                              "wrap": true
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
