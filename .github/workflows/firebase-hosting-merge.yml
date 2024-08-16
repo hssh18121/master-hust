@@ -24,7 +24,7 @@ jobs:
       - name: Notify success on Teams
         if: success()
         run: |
-          curl --location 'https://prod2-17.southeastasia.logic.azure.com:443/workflows/70f0600914b747c2a45cb8585062f2e3/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=I6v9JQvaF0RbxwEDKxREUI3OyNdBoxGl9f8uJcBn3V0' \
+          curl --location '${{ secrets.TEAMS_WEBHOOK_URL }}' \
           --header 'Content-Type: application/json' \
           --data '{
             "type": "message",
@@ -50,7 +50,7 @@ jobs:
       - name: Notify failure on Teams
         if: failure()
         run: |
-          curl --location 'https://prod2-17.southeastasia.logic.azure.com:443/workflows/70f0600914b747c2a45cb8585062f2e3/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=I6v9JQvaF0RbxwEDKxREUI3OyNdBoxGl9f8uJcBn3V0' \
+          curl --location '${{ secrets.TEAMS_WEBHOOK_URL }}' \
           --header 'Content-Type: application/json' \
           --data '{
             "type": "message",
@@ -72,5 +72,3 @@ jobs:
               }
             ]
           }'
-
-
