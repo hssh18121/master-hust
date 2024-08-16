@@ -29,10 +29,7 @@ jobs:
           --data '{
             "attachments": [
               {
-                "contentType": "application/json",
-                "content": {
-                  "text": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
-                }  
+                "contentType": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
               }
             ]
           }'
@@ -45,10 +42,8 @@ jobs:
           --data '{
             "attachments": [
               {
-                "contentType": "application/json",
-                "content": {
-                  "text": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
-                }  
+                "contentType": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
               }
             ]
           }'
+
