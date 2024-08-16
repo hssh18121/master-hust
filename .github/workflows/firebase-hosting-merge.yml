@@ -24,60 +24,53 @@ jobs:
       - name: Notify success on Teams
         if: success()
         run: |
-          curl -X POST -H 'Content-Type: application/json' \
-          -d '{
-                "type": "message",
-                "attachments": [
-                  {
-                    "contentType": "application/vnd.microsoft.card.adaptive",
-                    "contentUrl": null,
-                    "content": {
-                      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-                      "type": "AdaptiveCard",
-                      "version": "1.2",
-                      "body": [
-                        {
-                          "type": "TextBlock",
-                          "text": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}."
-                        },
-                        {
-                          "type": "TextBlock",
-                          "text": "View the run: [Link](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-                        }
-                      ]
+          curl --location 'https://prod2-17.southeastasia.logic.azure.com:443/workflows/70f0600914b747c2a45cb8585062f2e3/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=I6v9JQvaF0RbxwEDKxREUI3OyNdBoxGl9f8uJcBn3V0' \
+          --header 'Content-Type: application/json' \
+          --data '{
+            "type": "message",
+            "attachments": [
+              {
+                "contentType": "application/vnd.microsoft.card.adaptive",
+                "contentUrl": null,
+                "content": {
+                  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                  "type": "AdaptiveCard",
+                  "version": "1.2",
+                  "body": [
+                    {
+                      "type": "TextBlock",
+                      "text": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
                     }
-                  }
-                ]
-              }' \
-          ${{ secrets.TEAMS_WEBHOOK_URL }}
+                  ]
+                }
+              }
+            ]
+          }'
 
       - name: Notify failure on Teams
         if: failure()
         run: |
-          curl -X POST -H 'Content-Type: application/json' \
-          -d '{
-                "type": "message",
-                "attachments": [
-                  {
-                    "contentType": "application/vnd.microsoft.card.adaptive",
-                    "contentUrl": null,
-                    "content": {
-                      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-                      "type": "AdaptiveCard",
-                      "version": "1.2",
-                      "body": [
-                        {
-                          "type": "TextBlock",
-                          "text": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}."
-                        },
-                        {
-                          "type": "TextBlock",
-                          "text": "View the run: [Link](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-                        }
-                      ]
+          curl --location 'https://prod2-17.southeastasia.logic.azure.com:443/workflows/70f0600914b747c2a45cb8585062f2e3/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=I6v9JQvaF0RbxwEDKxREUI3OyNdBoxGl9f8uJcBn3V0' \
+          --header 'Content-Type: application/json' \
+          --data '{
+            "type": "message",
+            "attachments": [
+              {
+                "contentType": "application/vnd.microsoft.card.adaptive",
+                "contentUrl": null,
+                "content": {
+                  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                  "type": "AdaptiveCard",
+                  "version": "1.2",
+                  "body": [
+                    {
+                      "type": "TextBlock",
+                      "text": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}. View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
                     }
-                  }
-                ]
-              }' \
-          ${{ secrets.TEAMS_WEBHOOK_URL }}
+                  ]
+                }
+              }
+            ]
+          }'
+
 
