@@ -45,12 +45,17 @@ jobs:
                           "items": [
                             {
                               "type": "TextBlock",
-                              "text": "🎉 Build and deploy succeeded for ${{ github.repository }} on branch ${{ github.ref_name }}.",
+                              "text": "🎉 ${{ github.repository }} のブランチ ${{ github.ref_name }} でのビルドとデプロイが成功しました。",
                               "wrap": true
                             },
                             {
                               "type": "TextBlock",
-                              "text": "View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).",
+                              "text": "actor: ${{ github.actor }}",
+                              "wrap": true
+                            },
+                            {
+                              "type": "TextBlock",
+                              "text": "ランの詳細は[こちら](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})をご覧ください。",
                               "wrap": true
                             }
                           ]
@@ -62,6 +67,7 @@ jobs:
               }
             ]
           }'
+
 
       - name: Notify failure on Teams
         if: failure()
@@ -87,12 +93,17 @@ jobs:
                           "items": [
                             {
                               "type": "TextBlock",
-                              "text": "🚨 Build and deploy failed for ${{ github.repository }} on branch ${{ github.ref_name }}.",
+                              "text": "🚨 ${{ github.repository }} のブランチ ${{ github.ref_name }} でのビルドとデプロイが失敗しました。",
                               "wrap": true
                             },
                             {
                               "type": "TextBlock",
-                              "text": "View the run [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).",
+                              "text": "actor: ${{ github.actor }}",
+                              "wrap": true
+                            },
+                            {
+                              "type": "TextBlock",
+                              "text": "ランの詳細は[こちら](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})をご覧ください。",
                               "wrap": true
                             }
                           ]
@@ -104,4 +115,3 @@ jobs:
               }
             ]
           }'
-
