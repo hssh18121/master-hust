@@ -50,7 +50,7 @@ jobs:
                             },
                             {
                               "type": "TextBlock",
-                              "text": "actor: ${{ github.actor }}",
+                              "text": "<at>{{ github.actor }}</at> がビルドを実行しました。",
                               "wrap": true
                             },
                             {
@@ -62,12 +62,23 @@ jobs:
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "msteams": {
+                    "entities": [
+                      {
+                        "type": "mention",
+                        "text": "<at>${{ github.actor }}</at>",
+                        "mentioned": {
+                          "id": "${{ github.actor }}",
+                          "name": "${{ github.actor }}"
+                        }
+                      }
+                    ]
+                  }
                 }
               }
             ]
           }'
-
 
       - name: Notify failure on Teams
         if: failure()
@@ -98,7 +109,7 @@ jobs:
                             },
                             {
                               "type": "TextBlock",
-                              "text": "actor: ${{ github.actor }}",
+                              "text": "<at>{{ github.actor }}</at> がビルドを実行しました。",
                               "wrap": true
                             },
                             {
@@ -110,7 +121,19 @@ jobs:
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "msteams": {
+                    "entities": [
+                      {
+                        "type": "mention",
+                        "text": "<at>${{ github.actor }}</at>",
+                        "mentioned": {
+                          "id": "${{ github.actor }}",
+                          "name": "${{ github.actor }}"
+                        }
+                      }
+                    ]
+                  }
                 }
               }
             ]
